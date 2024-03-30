@@ -1,6 +1,20 @@
-import "@/styles/globals.css";
-import type { AppProps } from "next/app";
+import "../styles/globals.css";
+import { AppProps } from "next/app";
+import Head from "next/head";
+import Layout from "@/components/Layout";
 
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+function MyApp({ Component, pageProps, router }: AppProps) {
+  return (
+    <>
+      <Head>
+        <link className="rounded-full" rel="icon" href="/assets/favicon.png" />
+      </Head>
+
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </>
+  );
 }
+
+export default MyApp;
