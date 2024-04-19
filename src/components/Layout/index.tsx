@@ -1,11 +1,11 @@
 import React, { ReactNode, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import Sidebar from "../Common/Sidebar";
 import Footer from "../Common/Footer";
 import Loader from "../Common/Loader";
-import { handleResource } from "@/utils/APIRequester";
-import { userSliceData } from "../../../app/feature/userSlice";
+// import { handleResource } from "@/utils/APIRequester";
+// import { userSliceData } from "../../../app/feature/userSlice";
 import Header from "../Common/Header";
 
 interface LayoutProps {
@@ -15,7 +15,8 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   const router = useRouter();
   // const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  const [mobileMenu, setMobileMenu] = useState(false);
 
   // const getProfile = async () => {
   //   setLoading(true);
@@ -47,10 +48,10 @@ const Layout = ({ children }: LayoutProps) => {
   //   getProfile();
   // }, []);
 
-  if (loading) {
-    return <Loader />;
-  }
-  const [mobileMenu, setMobileMenu] = useState(false);
+  // if (loading) {
+  //   return <Loader />;
+  // }
+
   return (
     <>
       <div className="flex flex-auto min-h-screen">

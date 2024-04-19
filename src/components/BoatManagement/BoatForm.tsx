@@ -10,14 +10,15 @@ import ImageUploadInput from "../FormField/ImageUploadInput";
 
 function BoatForm() {
   const [loading, setLoading] = useState(false);
+  const [images,setImages]=useState<any>([])
   const { formData, handleChange, reset } = useForm({
-     user_id: "",
-     title: "",
-     made_by: "",
-     model: "",
-     license_plate_no: "",
-     fuel_id: "",
-     images: ['']
+    user_id: "",
+    title: "",
+    made_by: "",
+    model: "",
+    license_plate_no: "",
+    fuel_id: "",
+    images: [""],
   });
 
   const router = useRouter();
@@ -28,6 +29,13 @@ function BoatForm() {
       setEditId(router.query.editId);
     }
   }, [router.query]);
+
+  const handleImagesChange = (selectedImages: File[]) => {
+    const newImages = selectedImages.map((image) => ({
+      image,
+    }));
+    setImages( newImages);
+  };
 
   const getData = useCallback(async () => {
     if (!editId) return;
@@ -116,7 +124,9 @@ function BoatForm() {
                 title="License Plate"
                 required={true}
                 name="license_plate_no"
-                onChange={(value: string) => handleChange("license_plate_no", value)}
+                onChange={(value: string) =>
+                  handleChange("license_plate_no", value)
+                }
                 value={formData.license_plate_no}
               />
             </div>
@@ -125,15 +135,12 @@ function BoatForm() {
               <ImageUploadInput
                 title="Image"
                 name="image"
-                required={false}
-                allowMultiple={true}
+                required={editId ? false : true}
+                allowMultiple={false}
+                allowCount={1}
+                value={formData?.images}
                 allowedExtensions={["jpg", "png", "jpeg"]}
-                onImagesChange={(images) => {
-                  if (images.length > 0) {
-                    const firstImage: any = images[0];
-                    handleChange("image", firstImage);
-                  }
-                }}
+                onImagesChange={handleImagesChange}
               />
             </div>
           </div>

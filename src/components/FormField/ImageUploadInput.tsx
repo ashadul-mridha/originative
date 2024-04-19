@@ -5,10 +5,11 @@ import { MdDeleteForever } from "react-icons/md";
 interface ImageUploadInputProps {
   allowMultiple: boolean;
   allowedExtensions?: string[];
-  allowCount: number;
+  allowCount?: number;
   title: string;
   name: string;
   required: boolean;
+  value?: string[];
   onImagesChange: (images: File[]) => void;
 }
 
@@ -20,49 +21,56 @@ const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
   title,
   name,
   required,
+  value,
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
-  const [validationError, setValidationError] = useState<string | null>();
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (files) {
-      const newSelectedFiles = [...selectedFiles];
-      const newPreviewImages = [...previewImages];
-      let hasInvalidFile = false;
+    if (!files || files.length === 0) return;
 
-      Array.from(files).forEach((file) => {
-        const fileExtension = file.name.split(".").pop();
+    const newSelectedFiles: File[] = [];
+    const newPreviewImages: string[] = [];
+    let hasInvalidFile = false;
 
-        if (
-          allowedExtensions &&
-          fileExtension &&
-          allowedExtensions.indexOf(fileExtension.toLowerCase()) === -1
-        ) {
-          setValidationError(`Invalid file extension: .${fileExtension}`);
-          hasInvalidFile = true;
-        } else {
-          newSelectedFiles.push(file);
-          newPreviewImages.push(URL.createObjectURL(file));
-        }
-      });
+    Array.from(files).forEach((file) => {
+      const fileExtension = file.name.split(".").pop()?.toLowerCase();
 
-      if (hasInvalidFile) {
-        e.target.value = "";
-        return;
+      if (
+        allowedExtensions &&
+        fileExtension &&
+        !allowedExtensions.includes(fileExtension)
+      ) {
+        setValidationError(`Invalid file extension: .${fileExtension}`);
+        hasInvalidFile = true;
+      } else {
+        newSelectedFiles.push(file);
+        newPreviewImages.push(URL.createObjectURL(file));
       }
+    });
 
-      if (allowCount && newSelectedFiles.length > allowCount) {
-        setValidationError(`You can only upload ${allowCount} images.`);
-        return;
-      }
-
-      setSelectedFiles(newSelectedFiles);
-      setPreviewImages(newPreviewImages);
-      setValidationError(null);
-      onImagesChange(newSelectedFiles);
+    if (hasInvalidFile) {
+      e.target.value = "";
+      return;
     }
+
+    if (allowCount && newSelectedFiles.length > allowCount) {
+      setValidationError(`You can only upload ${allowCount} images.`);
+      return;
+    }
+
+    setSelectedFiles((prevSelectedFiles) => [
+      ...prevSelectedFiles,
+      ...newSelectedFiles,
+    ]);
+    setPreviewImages((prevPreviewImages) => [
+      ...prevPreviewImages,
+      ...newPreviewImages,
+    ]);
+    setValidationError(null);
+    onImagesChange([...selectedFiles, ...newSelectedFiles]);
   };
 
   const handleRemoveImage = (index: number) => {
@@ -77,7 +85,8 @@ const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
     onImagesChange(newSelectedFiles);
   };
 
-  const isFileInputDisabled = allowCount !== undefined && selectedFiles.length >= allowCount;
+  const isFileInputDisabled =
+    allowCount !== undefined && selectedFiles.length >= allowCount;
 
   return (
     <div className="space-y-2">
@@ -130,10 +139,32 @@ const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
               className="text-red-500 ml-2"
               title="Remove Image"
             >
-              <span className="text-2xl"><MdDeleteForever/></span>
+              <span className="text-2xl">
+                <MdDeleteForever />
+              </span>
             </button>
           </li>
         ))}
+        {selectedFiles.length <= 0 &&
+          value?.map((file, index) => (
+            <li key={index} className="flex items-center">
+              <img
+                src={value && value[index]}
+                // alt={file.name}
+                className="h-20 w-30 object-fit rounded"
+              />
+              {/* <span className="ml-2 font-semibold text-end">{file.name}</span> */}
+              <button
+                onClick={() => handleRemoveImage(index)}
+                className="text-red-500 ml-2"
+                title="Remove Image"
+              >
+                <span className="text-2xl">
+                  <MdDeleteForever />
+                </span>
+              </button>
+            </li>
+          ))}
       </ul>
     </div>
   );

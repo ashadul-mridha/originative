@@ -8,6 +8,8 @@ interface ResourceHandler {
   data?: {};
   id?: string | number;
   isMultipart?: boolean;
+  popupMessage?: boolean;
+  popupText?: string;
 }
 
 export const handleResource = async ({
@@ -16,6 +18,8 @@ export const handleResource = async ({
   data,
   id,
   isMultipart,
+  popupMessage,
+  popupText,
 }: ResourceHandler) => {
   const token = Cookies.get(`${process.env.NEXT_PUBLIC_TOKEN_NAME}`);
 
@@ -24,11 +28,11 @@ export const handleResource = async ({
       const confirmDelete = await Swal.fire({
         icon: "warning",
         title: "Confirmation",
-        text: "Are you sure you want to delete?",
+        text: "Are You Sure To Delete ?",
         showCancelButton: true,
         confirmButtonColor: "#d33",
         cancelButtonColor: "#3085d6",
-        confirmButtonText: "Yes, delete it!",
+        confirmButtonText: "Yes !",
         cancelButtonText: "Cancel",
       });
 
@@ -62,15 +66,15 @@ export const handleResource = async ({
     const response = await axios.request({
       method,
       url,
-      data: data && (isMultipart ? JSON.stringify(data) : data),
+      data: data,
       headers,
     });
 
-    if (method !== "get") {
+    if (response && popupMessage) {
       Swal.fire({
         icon: "success",
-        title: "Success",
-        text: "Operation Completed Successfully !",
+        title: "Success!",
+        text: popupText,
         timer: 1500,
       });
       return response.data;
@@ -78,14 +82,18 @@ export const handleResource = async ({
       return response.data;
     }
   } catch (error) {
-    if (endpoint !== "admin/profile") {
+    console.log("error", error);
+    if (
+      error instanceof Error &&
+      "response" in error &&
+      error.response !== undefined
+    ) {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Operation Failed. Please Try Again !",
-        timer: 2000,
+        text: (error.response as { data: { message: string } }).data.message,
+        timer: 3000,
       });
     }
-    throw error;
   }
 };

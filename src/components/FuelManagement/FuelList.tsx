@@ -1,26 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { MdDelete } from "react-icons/md";
-import { FaEye } from "react-icons/fa";
-import { useRouter } from "next/router";
-import { handleResource } from "@/utils/APIRequester";
+import React, { useEffect, useState } from "react";
 import ReusableTable from "../FormField/ReusableTable";
+import { useRouter } from "next/router";
+import { FaEye } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import { handleResource } from "@/utils/APIRequester";
 
-function SplashList() {
-  const [splash, setSplash] = useState([]);
+function FuelList() {
+  const [fuels, setFuels] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(25);
   const router = useRouter();
   const [pagination, setPagination] = useState<any>({});
 
-  const getSplashList = async () => {
+  const getBoatsList = async () => {
     try {
       setLoading(true);
       const result = await handleResource({
         method: "get",
-        endpoint: `splash?page=${page}&limit=${limit}`,
+        endpoint: `fuel?page=${page}&limit=${limit}`,
+        popupMessage: false,
       });
-      setSplash(result.data);
+      setFuels(result.data);
       setPagination(result.page);
       setLoading(false);
     } catch (error) {
@@ -28,38 +29,36 @@ function SplashList() {
     }
   };
 
-  const handleDelete = async (row: any) => {
+  const handleDelete = async (deletedId: any) => {
     try {
       setLoading(true);
       await handleResource({
         method: "delete",
-        endpoint: "splash",
-        id: row,
+        endpoint: "fuel",
+        id: deletedId,
+        popupMessage: true,
+        popupText:'Fuel Deleted Successfully !'
       });
       setLoading(false);
-      getSplashList();
+      getBoatsList();
     } catch (error) {
       console.error("Error deleting item:", error);
     }
   };
 
   useEffect(() => {
-    getSplashList();
+    getBoatsList();
   }, [limit, page]);
 
   const columns = [
     { name: "Title", selector: "title" },
     {
-      name: "Description",
-      selector: "description",
+      name: "Unit(gal)",
+      selector: "unit",
     },
     {
-      name: "Image",
-      selector: "images",
-    },
-    {
-      name: "Logo",
-      selector: "logo",
+      name: "Price",
+      selector: "price",
     },
     {
       name: "Status",
@@ -82,7 +81,7 @@ function SplashList() {
         <>
           <button
             className="border-2 border-blue-300 px-3 py-1 font-semibold text-blue-500 text-lg mx-1 rounded-lg"
-            onClick={() => router.push(`/splash/${row._id}`)}
+            onClick={() => router.push(`/fuels/add-form?editId=${row._id}`)}
           >
             <FaEye />
           </button>
@@ -115,7 +114,7 @@ function SplashList() {
           <div className="px-3">
             {" "}
             <ReusableTable
-              data={splash}
+              data={fuels}
               columns={columns}
               limit={limit}
               page={page}
@@ -130,4 +129,4 @@ function SplashList() {
   );
 }
 
-export default SplashList;
+export default FuelList;

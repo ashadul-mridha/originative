@@ -95,6 +95,7 @@ function BoatList() {
     setLimit(newLimit);
     setPage(newPage);
   };
+  
   return (
     <>
       {loading ? (

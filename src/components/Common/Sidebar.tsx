@@ -1,6 +1,6 @@
-import { CiShop } from "react-icons/ci";
-import { TbShoppingCartSearch } from "react-icons/tb";
-import { MdOutlineProductionQuantityLimits } from "react-icons/md";
+// import { CiShop } from "react-icons/ci";
+// import { TbShoppingCartSearch } from "react-icons/tb";
+// import { MdOutlineProductionQuantityLimits } from "react-icons/md";
 import React, { useEffect, useState } from "react";
 // import logo from "../../../public/assets/logo.jpg";
 import Link from "next/link";
@@ -10,10 +10,10 @@ import HamburgerMenu from "./HamburgerMenu";
 // import { RootState } from "../../../app/store";
 // import { handleResource } from "@/utils/APIRequester";
 // import { resetCartUpdated } from "../../../app/feature/cartSlice";
-import Image from "next/image";
-import Header from "./Header";
-import { MdOutlineConnectWithoutContact } from "react-icons/md";
-import { TiInfoLargeOutline } from "react-icons/ti";
+// import Image from "next/image";
+// import Header from "./Header";
+// import { MdOutlineConnectWithoutContact } from "react-icons/md";
+// import { TiInfoLargeOutline } from "react-icons/ti";
 import { IoBoatOutline } from "react-icons/io5";
 import { MdOutlineDashboard } from "react-icons/md";
 import { GiWaterSplash } from "react-icons/gi";
@@ -75,71 +75,71 @@ const Sidebar = () => {
       path: "/splash",
       src: <GiWaterSplash />,
     },
-    {
-      title: "Users",
-      path: "/users",
-      src: <HiOutlineUsers />,
-    },
-    {
-      title: "OTP",
-      path: "/otp",
-      src: <TbPasswordUser />,
-    },
+    // {
+    //   title: "Users",
+    //   path: "/users",
+    //   src: <HiOutlineUsers />,
+    // },
+    // {
+    //   title: "OTP",
+    //   path: "/otp",
+    //   src: <TbPasswordUser />,
+    // },
     {
       title: "Fuels",
       path: "/fuels",
       src: <BsFuelPump />,
     },
-    {
-      title: "Boats",
-      path: "/boats",
-      src: <IoBoatOutline />,
-    },
-    {
-      title: "Refueling Boats",
-      path: "/refueling-boats",
-      src: <FaFill />,
-    },
-    {
-      title: "Tipping",
-      path: "/tipping",
-      src: <MdMultipleStop />,
-    },
-    {
-      title: "Coupons",
-      path: "/coupons",
-      src: <RiCoupon3Line />,
-    },
-    {
-      title: "Chats",
-      path: "/chats",
-      src: <BsChatLeftDots />,
-    },
-    {
-      title: "Notification",
-      path: "/notification",
-      src: <MdOutlineNotificationImportant />,
-    },
-    {
-      title: "Customer Support",
-      path: "/customer-support",
-      src: <MdOutlineSupportAgent />,
-    },
-    {
-      title: "Service Workers",
-      path: "/service-worker",
-      src: <GrUserWorker />,
-    },
-    {
-      title: "Service Worker Withdrawal",
-      path: "/service-worker-withdrawal",
-      src: <IoBoatOutline />,
-    },
-    {
-      title: "Admins",
-      path: "/admins",
-      src: <GrUserAdmin />,
-    },
+    // {
+    //   title: "Boats",
+    //   path: "/boats",
+    //   src: <IoBoatOutline />,
+    // },
+    // {
+    //   title: "Refueling Boats",
+    //   path: "/refueling-boats",
+    //   src: <FaFill />,
+    // },
+    // {
+    //   title: "Tipping",
+    //   path: "/tipping",
+    //   src: <MdMultipleStop />,
+    // },
+    // {
+    //   title: "Coupons",
+    //   path: "/coupons",
+    //   src: <RiCoupon3Line />,
+    // },
+    // {
+    //   title: "Chats",
+    //   path: "/chats",
+    //   src: <BsChatLeftDots />,
+    // },
+    // {
+    //   title: "Notification",
+    //   path: "/notification",
+    //   src: <MdOutlineNotificationImportant />,
+    // },
+    // {
+    //   title: "Customer Support",
+    //   path: "/customer-support",
+    //   src: <MdOutlineSupportAgent />,
+    // },
+    // {
+    //   title: "Service Workers",
+    //   path: "/service-worker",
+    //   src: <GrUserWorker />,
+    // },
+    // {
+    //   title: "Service Worker Withdrawal",
+    //   path: "/service-worker-withdrawal",
+    //   src: <IoBoatOutline />,
+    // },
+    // {
+    //   title: "Admins",
+    //   path: "/admins",
+    //   src: <GrUserAdmin />,
+    // },
   ];
 
   return (
