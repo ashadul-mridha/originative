@@ -13,12 +13,13 @@ function SplashForm() {
   const { formData, handleChange, reset } = useForm({
     title: "",
     description: "",
-    image: "",
+    images: [],
     logo: "",
   });
-
   const router = useRouter();
   const [editId, setEditId] = useState<string | string[] | null>(null);
+  const [logos, setLogos] = useState<any>([]);
+  const [images, setImages] = useState<any>([]);
 
   useEffect(() => {
     if (router.query?.editId) {
@@ -26,8 +27,22 @@ function SplashForm() {
     }
   }, [router.query]);
 
+  const handleImagesChange = (selectedImages: File[]) => {
+    const newImages = selectedImages.map((image) => ({
+      image,
+    }));
+    setImages(newImages);
+  };
+  const handleLogoChange = (selectedImages: File[]) => {
+    const newImages = selectedImages.map((image) => ({
+      image,
+    }));
+    setLogos(newImages);
+  };
+
   const getData = useCallback(async () => {
     if (!editId) return;
+    setLoading(true);
     const response = await handleResource({
       method: "get",
       endpoint: "splash/" + editId,
@@ -35,39 +50,104 @@ function SplashForm() {
 
     if (response.data) {
       reset({
-        title: response.title,
-        description: response.description,
-        image: response.image,
-        logo: response.logo,
+        title: response.data.title,
+        description: response.data.description,
+        image: response.data.images,
+        logo: response.data.logo,
       });
+      setLoading(false);
     }
   }, [editId, reset]);
 
   useEffect(() => {
     getData();
   }, [editId]);
-
-  const handleSubmit = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
+  const updateData = async () => {
+    try {
       const payload = {
         title: formData.title?.trim(),
         description: formData.description,
-        image: formData.image,
-        logo: formData.logo,
       };
+      await handleResource({
+        method: "patch",
+        endpoint: `splash/${editId}`,
+        data: payload,
+        isMultipart: false,
+        popupMessage: true,
+        popupText: "Splash Updated Successfully !",
+      });
+      setLoading(false);
+      router.push("/splash");
+    } catch (error) {
+      setLoading(false);
+    }
+  };
+  const createData = async () => {
+    if (logos && images) {
+      const imagesPayload = new FormData();
+
+      logos?.forEach((logo: any) => {
+        if (logo.image instanceof File) {
+          imagesPayload.append(`logo`, logo.image);
+        }
+      });
+
+      images?.forEach((image: any) => {
+        if (image.image instanceof File) {
+          imagesPayload.append(`images`, image.image);
+        }
+      });
+
       try {
-        setLoading(true);
-        await handleResource({
+        const response = await handleResource({
           method: editId ? "patch" : "post",
-          endpoint: editId ? `splash/${editId}` : "splash",
-          data: payload,
-          isMultipart: false,
+          endpoint: editId ? `image-library/${editId}` : "image-library",
+          data: imagesPayload,
+          isMultipart: true,
         });
-        setLoading(false);
-        router.push("/splash");
+
+        if (response.data) {
+          let logo = "";
+          const imagesArray: string[] = [];
+          response.data.forEach((item: any) => {
+            if (item.fieldName === "logo") {
+              logo = item.fileName;
+            } else {
+              imagesArray.push(item.fileName);
+            }
+            handleChange("images", imagesArray);
+          });
+          const payload = {
+            title: formData.title?.trim(),
+            description: formData.description,
+            images: imagesArray,
+            logo: logo,
+          };
+
+          await handleResource({
+            method: "post",
+            endpoint: "splash",
+            data: payload,
+            isMultipart: false,
+            popupMessage: true,
+            popupText: "Splash Created Successfully !",
+          });
+          setLoading(false);
+          router.push("/splash");
+        }
       } catch (error) {
         setLoading(false);
+      }
+    }
+  };
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      setLoading(true);
+      if (editId) {
+        updateData();
+      } else {
+        createData();
       }
     },
     [formData, editId, router]
@@ -98,16 +178,12 @@ function SplashForm() {
               <ImageUploadInput
                 title="Image"
                 name="image"
-                required={false}
+                required={editId ? false : true}
                 allowMultiple={true}
-                allowCount={5}
+                allowCount={3}
+                value={images}
                 allowedExtensions={["jpg", "png", "jpeg"]}
-                onImagesChange={(images) => {
-                  if (images.length > 0) {
-                    const firstImage: any = images[0];
-                    handleChange("image", firstImage);
-                  }
-                }}
+                onImagesChange={handleImagesChange}
               />
             </div>
 
@@ -115,19 +191,15 @@ function SplashForm() {
               <ImageUploadInput
                 title="Logo"
                 name="logo"
-                required={false}
+                required={editId ? false : true}
                 allowMultiple={false}
-                allowCount={2}
+                allowCount={1}
+                // value={editId? formData.logo:logos}
+                value={logos}
                 allowedExtensions={["jpg", "png", "jpeg"]}
-                onImagesChange={(images) => {
-                  if (images.length > 0) {
-                    const firstImage: any = images[0];
-                    handleChange("logo", firstImage);
-                  }
-                }}
+                onImagesChange={handleLogoChange}
               />
             </div>
-
           </div>
 
           <div className="w-full my-3">
@@ -167,9 +239,9 @@ function SplashForm() {
               className="border border-red-500 text-red-500 px-6 py-2 mx-2 font-semibold rounded-md flex items-center gap-x-3"
               type="button"
               onClick={() => {
-                editId
-                  ? router.push("/splash/" + editId)
-                  : router.push("/splash");
+                // editId
+                //   ? router.push("/splash/" + editId) :
+                router.push("/splash");
               }}
             >
               <span className="text-2xl">
