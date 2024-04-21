@@ -52,13 +52,31 @@ function SplashList() {
     {
       name: "Image",
       selector: "images",
-      cell: (row: any) => (
-        <div style={{ whiteSpace: "pre-line" }}>{row.images.join(", ")}</div>
-      ),
+      cell: (row: any) =>
+        row.images.map((image: string, index: number) => (
+          <a
+            className="text-blue-900 font-semibold"
+            href={`${process.env.NEXT_PUBLIC_IMAGE_URL}${image}`}
+            target="_blank"
+          >
+            Image {index + 1} <br />
+          </a>
+        )),
     },
     {
       name: "Logo",
       selector: "logo",
+      cell: (row: any) => (
+        <div style={{ whiteSpace: "pre-line" }}>
+          <a
+            className="text-blue-900 font-semibold"
+            href={`${process.env.NEXT_PUBLIC_IMAGE_URL}${row.logo}`}
+            target="_blank"
+          >
+            Logo
+          </a>
+        </div>
+      ),
     },
     { name: "Title", selector: "title" },
     {

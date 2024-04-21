@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { FaEye } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { handleResource } from "@/utils/APIRequester";
+import { LuClipboardEdit } from "react-icons/lu";
 
 function FuelList() {
   const [fuels, setFuels] = useState([]);
@@ -37,7 +38,7 @@ function FuelList() {
         endpoint: "fuel",
         id: deletedId,
         popupMessage: true,
-        popupText:'Fuel Deleted Successfully !'
+        popupText: "Fuel Deleted Successfully !",
       });
       setLoading(false);
       getBoatsList();
@@ -83,7 +84,7 @@ function FuelList() {
             className="border-2 border-blue-300 px-3 py-1 font-semibold text-blue-500 text-lg mx-1 rounded-lg"
             onClick={() => router.push(`/fuels/add-form?editId=${row._id}`)}
           >
-            <FaEye />
+            <LuClipboardEdit />
           </button>
           <button
             className="border-2 border-red-300 px-3 py-1 font-semibold text-red-500 text-lg mx-1 rounded-lg"

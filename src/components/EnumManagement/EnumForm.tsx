@@ -91,35 +91,32 @@ function EnumForm() {
   //   [keyValue]
   // );
 
-  const handleUpdate = (name: string, value: string, index: number) => {
-    const updatedValues = [...formData.values];
-    updatedValues[index] = value;
-    handleChange("values", updatedValues);
-  };
+  // const handleUpdate = (name: string, value: string, index: number) => {
+  //   const updatedValues = [...formData.values];
+  //   updatedValues[index] = value;
+  //   handleChange("values", updatedValues);
+  // };
 
   const handleAdd = useCallback(() => {
-    if (formData.value.trim() !== '') {
+    if (formData.value.trim() !== "") {
       setKeyValue((prevKeyValue: any) => [...prevKeyValue, formData.value]);
       // reset(); // Reset form after adding
     }
   }, [formData.value, reset]);
 
-  const handleRemove = useCallback(
-    (index: number) => {
-      setKeyValue((prevKeyValue: any) => {
-        const temp = [...prevKeyValue];
-        temp.splice(index, 1);
-        return temp;
-      });
-    },
-    []
-  );
+  const handleRemove = useCallback((index: number) => {
+    setKeyValue((prevKeyValue: any) => {
+      const temp = [...prevKeyValue];
+      temp.splice(index, 1);
+      return temp;
+    });
+  }, []);
 
-  // const handleUpdate = (value: string, index: number) => {
-  //   const updatedValues = [...keyValue];
-  //   updatedValues[index] = value;
-  //   setKeyValue(updatedValues);
-  // };
+  const handleUpdate = (value: string, index: number) => {
+    const updatedValues = [...keyValue];
+    updatedValues[index] = value;
+    setKeyValue(updatedValues);
+  };
 
   return (
     <>
@@ -209,55 +206,59 @@ function EnumForm() {
             </div> */}
 
             <div>
-      {!editId && keyValue.map((item: any, index: number) => (
-        <div key={index} className="flex gap-8 items-center">
-          <p className="text-lg">{index + 1}. {item}</p>
-          <button
-            type="button"
-            onClick={() => handleRemove(index)}
-            className="px-3 py-1.5 font-semibold text-red-500 border border-red-500 rounded-lg h-10 mb-3 flex items-center ml-auto gap-4"
-          >
-            <MdDelete />
-          </button>
-        </div>
-      ))}
+              {!editId &&
+                keyValue.map((item: any, index: number) => (
+                  <div key={index} className="flex gap-8 items-center">
+                    <p className="text-lg">
+                      {index + 1}. {item}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => handleRemove(index)}
+                      className="px-3 py-1.5 font-semibold text-red-500 border border-red-500 rounded-lg h-10 mb-3 flex items-center ml-auto gap-4"
+                    >
+                      <MdDelete />
+                    </button>
+                  </div>
+                ))}
 
-      {editId && formData?.values?.map((item: any, index: number) => (
-        <div key={index} className="flex gap-8 items-center">
-          <TextField
-            placeholder="Example"
-            type="text"
-            title={`Value`}
-            required={true}
-            name={`value`}
-            onChange={(value: string) => handleUpdate(value, index)}
-            value={item || ""}
-          />
-          {/* Add your button or other elements for editing */}
-        </div>
-      ))}
+              {editId &&
+                formData?.values?.map((item: any, index: number) => (
+                  <div key={index} className="flex gap-8 items-center">
+                    <TextField
+                      placeholder="Example"
+                      type="text"
+                      title={`Value`}
+                      required={true}
+                      name={`value`}
+                      onChange={(value: string) => handleUpdate(value, index)}
+                      value={item || ""}
+                    />
+                    {/* Add your button or other elements for editing */}
+                  </div>
+                ))}
 
-      <div className="flex w-full items-center gap-5">
-        <div className="w-10/12">
-          <TextField
-            placeholder="Example"
-            type="text"
-            title={`Value`}
-            required={true}
-            name={"value"}
-            onChange={(value: string) => handleChange(`value`, value)}
-            value={formData.value || ""}
-          />
-        </div>
-        <button
-          type="button"
-          onClick={handleAdd}
-          className="h-8 px-3 py-1.5 font-semibold  text-blue-700 border border-blue-700 rounded-full flex items-end gap-4"
-        >
-          <FaPlus />
-        </button>
-      </div>
-    </div>
+              <div className="flex w-full items-center gap-5">
+                <div className="w-10/12">
+                  <TextField
+                    placeholder="Example"
+                    type="text"
+                    title={`Value`}
+                    required={true}
+                    name={"value"}
+                    onChange={(value: string) => handleChange(`value`, value)}
+                    value={formData.value || ""}
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={handleAdd}
+                  className="h-8 px-3 py-1.5 font-semibold  text-blue-700 border border-blue-700 rounded-full flex items-end gap-4"
+                >
+                  <FaPlus />
+                </button>
+              </div>
+            </div>
           </div>
 
           <div className="flex justify-center my-12">
