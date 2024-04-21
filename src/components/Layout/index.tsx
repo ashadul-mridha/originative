@@ -56,7 +56,7 @@ const Layout = ({ children }: LayoutProps) => {
     <>
       <div className="flex flex-auto min-h-screen">
         <Sidebar />
-        <div className="grow">
+        <div className="flex-grow overflow-x-auto">
           <Header setMobileMenu={setMobileMenu} mobileMenu={mobileMenu} />
           <div className="m-5">{children}</div>
           <footer className="text-end p-5 text-gray-600 text-sm italic">

@@ -140,9 +140,9 @@ function FuelForm() {
               className="border border-red-500 text-red-500 px-6 py-2 mx-2 font-semibold rounded-md flex items-center gap-x-3"
               type="button"
               onClick={() => {
-                editId
-                  ? router.push("/flight/" + editId)
-                  : router.push("/flight");
+                // editId
+                //   ? router.push("/fuels/" + editId) : 
+                  router.push("/fuels");
               }}
             >
               <span className="text-2xl">
