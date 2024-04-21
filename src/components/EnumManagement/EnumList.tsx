@@ -78,12 +78,12 @@ function EnumList() {
       name: "Action",
       cell: (row: any) => (
         <>
-          {/* <button
+          <button
             className="border-2 border-blue-300 px-3 py-1 font-semibold text-blue-500 text-lg mx-1 rounded-lg"
             onClick={() => router.push(`/enums/add-form?editId=${row._id}`)}
           >
             <CiEdit />
-          </button> */}
+          </button>
           <button
             className="border-2 border-red-300 px-3 py-1 font-semibold text-red-500 text-lg mx-1 rounded-lg"
             onClick={() => handleDelete(row._id)}
