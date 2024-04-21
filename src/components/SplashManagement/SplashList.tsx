@@ -4,7 +4,7 @@ import { FaEye } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { handleResource } from "@/utils/APIRequester";
 import ReusableTable from "../FormField/ReusableTable";
-import { LuClipboardEdit } from "react-icons/lu";
+import { CiEdit } from "react-icons/ci";
 
 function SplashList() {
   const [splash, setSplash] = useState([]);
@@ -55,6 +55,7 @@ function SplashList() {
       cell: (row: any) =>
         row.images.map((image: string, index: number) => (
           <a
+            key={index}
             className="text-blue-900 font-semibold"
             href={`${process.env.NEXT_PUBLIC_IMAGE_URL}${image}`}
             target="_blank"
@@ -109,7 +110,7 @@ function SplashList() {
             className="border-2 border-blue-300 px-3 py-1 font-semibold text-blue-500 text-lg mx-1 rounded-lg"
             onClick={() => router.push(`/splash/add-form?editId=${row._id}`)}
           >
-            <LuClipboardEdit />
+            <CiEdit />
           </button>
           <button
             className="border-2 border-red-300 px-3 py-1 font-semibold text-red-500 text-lg mx-1 rounded-lg"

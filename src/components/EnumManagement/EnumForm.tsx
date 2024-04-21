@@ -235,6 +235,13 @@ function EnumForm() {
                       value={item || ""}
                     />
                     {/* Add your button or other elements for editing */}
+                    <button
+                      type="button"
+                      // onClick={() => handleRemove(index)}
+                      className="px-3 py-1.5 font-semibold text-red-500 border border-red-500 rounded-lg h-10 mb-3 flex items-center ml-auto gap-4"
+                    >
+                      <MdDelete />
+                    </button>
                   </div>
                 ))}
 

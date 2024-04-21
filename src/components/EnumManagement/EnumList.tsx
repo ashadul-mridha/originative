@@ -1,7 +1,7 @@
 import { handleResource } from "@/utils/APIRequester";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { LuClipboardEdit } from "react-icons/lu";
+import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import ReusableTable from "../FormField/ReusableTable";
 
@@ -82,7 +82,7 @@ function EnumList() {
             className="border-2 border-blue-300 px-3 py-1 font-semibold text-blue-500 text-lg mx-1 rounded-lg"
             onClick={() => router.push(`/enums/add-form?editId=${row._id}`)}
           >
-            <LuClipboardEdit />
+            <CiEdit />
           </button> */}
           <button
             className="border-2 border-red-300 px-3 py-1 font-semibold text-red-500 text-lg mx-1 rounded-lg"
