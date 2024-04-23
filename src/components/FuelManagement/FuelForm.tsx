@@ -131,7 +131,7 @@ function FuelForm() {
                   <span className="text-2xl">
                     <BsSendPlusFill />
                   </span>{" "}
-                  Submit
+                  {editId ? "Update": "Submit"}
                 </>
               )}
             </button>

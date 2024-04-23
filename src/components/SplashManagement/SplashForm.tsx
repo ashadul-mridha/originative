@@ -7,13 +7,24 @@ import { MdCancel } from "react-icons/md";
 import { BsSendPlusFill } from "react-icons/bs";
 import RichTextEditor from "../FormField/RichTextEditor";
 import ImageUploadInput from "../FormField/ImageUploadInput";
+import SelectInput from "../FormField/SelectInput";
+
+interface InitialOptions {
+  value: string;
+  label: string;
+}
+const initialOptions: InitialOptions[] = [
+  { value: "user", label: "User" },
+  { value: "service_worker", label: "Service Worker" },
+];
 
 function SplashForm() {
   const [loading, setLoading] = useState(false);
   const { formData, handleChange, reset } = useForm({
     title: "",
+    type: "",
     description: "",
-    images: [],
+    image: "",
     logo: "",
   });
   const router = useRouter();
@@ -26,6 +37,13 @@ function SplashForm() {
       setEditId(router.query.editId);
     }
   }, [router.query]);
+
+  const typeOptions = (data: any) => {
+    return data.map((item: any) => ({
+      value: item.value,
+      label: item.label,
+    }));
+  };
 
   const handleImagesChange = (selectedImages: File[]) => {
     const newImages = selectedImages.map((image) => ({
@@ -51,6 +69,7 @@ function SplashForm() {
     if (response.data) {
       reset({
         title: response.data.title,
+        type: response.data.type,
         description: response.data.description,
         image: response.data.images,
         logo: response.data.logo,
@@ -62,6 +81,7 @@ function SplashForm() {
   useEffect(() => {
     getData();
   }, [editId]);
+
   const updateData = async () => {
     try {
       const payload = {
@@ -82,6 +102,7 @@ function SplashForm() {
       setLoading(false);
     }
   };
+
   const createData = async () => {
     if (logos && images) {
       const imagesPayload = new FormData();
@@ -94,7 +115,7 @@ function SplashForm() {
 
       images?.forEach((image: any) => {
         if (image.image instanceof File) {
-          imagesPayload.append(`images`, image.image);
+          imagesPayload.append(`image`, image.image);
         }
       });
 
@@ -108,19 +129,19 @@ function SplashForm() {
 
         if (response.data) {
           let logo = "";
-          const imagesArray: string[] = [];
+          let image = "";
           response.data.forEach((item: any) => {
             if (item.fieldName === "logo") {
               logo = item.fileName;
             } else {
-              imagesArray.push(item.fileName);
+              image = item.fileName;
             }
-            handleChange("images", imagesArray);
           });
           const payload = {
             title: formData.title?.trim(),
+            type: formData.type,
             description: formData.description,
-            images: imagesArray,
+            images: image,
             logo: logo,
           };
 
@@ -175,12 +196,30 @@ function SplashForm() {
             </div>
 
             <div>
+              <SelectInput
+                name="type"
+                title="Type"
+                placeholder="Example"
+                required={true}
+                isMulti={false}
+                initialOptions={initialOptions}
+                // endpoint="category?searchText"
+                mapOptions={typeOptions}
+                noOptionsMessage="No matching options"
+                value={formData.type || null}
+                onChange={(selectedItem: any) => {
+                  handleChange("type", selectedItem ? selectedItem : "");
+                }}
+              />
+            </div>
+
+            <div>
               <ImageUploadInput
                 title="Image"
                 name="image"
                 required={editId ? false : true}
-                allowMultiple={true}
-                allowCount={3}
+                allowMultiple={false}
+                allowCount={1}
                 value={images}
                 allowedExtensions={["jpg", "png", "jpeg"]}
                 onImagesChange={handleImagesChange}
@@ -194,10 +233,9 @@ function SplashForm() {
                 required={editId ? false : true}
                 allowMultiple={false}
                 allowCount={1}
-                // value={editId? formData.logo:logos}
-                value={logos}
                 allowedExtensions={["jpg", "png", "jpeg"]}
                 onImagesChange={handleLogoChange}
+                value={[`${process.env.NEXT_PUBLIC_IMAGE_URL}${formData.logo}`]}
               />
             </div>
           </div>
@@ -230,7 +268,7 @@ function SplashForm() {
                   <span className="text-2xl">
                     <BsSendPlusFill />
                   </span>{" "}
-                  Submit
+                  {editId ? "Update": "Submit"}
                 </>
               )}
             </button>

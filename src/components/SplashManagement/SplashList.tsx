@@ -4,10 +4,11 @@ import { FaEye } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { handleResource } from "@/utils/APIRequester";
 import ReusableTable from "../FormField/ReusableTable";
-import { CiEdit } from "react-icons/ci";
+
+import { Splash } from "@/utils/constant";
 
 function SplashList() {
-  const [splash, setSplash] = useState([]);
+  const [splash, setSplash] = useState<Splash[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(25);
@@ -52,17 +53,17 @@ function SplashList() {
     {
       name: "Image",
       selector: "images",
-      cell: (row: any) =>
-        row.images.map((image: string, index: number) => (
+      cell: (row: any) => (
+        <div style={{ whiteSpace: "pre-line" }}>
           <a
-            key={index}
             className="text-blue-900 font-semibold"
-            href={`${process.env.NEXT_PUBLIC_IMAGE_URL}${image}`}
+            href={`${process.env.NEXT_PUBLIC_IMAGE_URL}${row.images}`}
             target="_blank"
           >
-            Image {index + 1} <br />
+            Image
           </a>
-        )),
+        </div>
+      ),
     },
     {
       name: "Logo",
@@ -80,13 +81,14 @@ function SplashList() {
       ),
     },
     { name: "Title", selector: "title" },
-    {
-      name: "Description",
-      selector: "description",
-      cell: (row: any) => (
-        <div dangerouslySetInnerHTML={{ __html: row.description }}></div>
-      ),
-    },
+    { name: "Type", selector: "type" },
+    // {
+    //   name: "Description",
+    //   selector: "description",
+    //   cell: (row: any) => (
+    //     <div className=" flex-wrap" dangerouslySetInnerHTML={{ __html: row.description }}></div>
+    //   ),
+    // },
     {
       name: "Status",
       selector: "is_active",
@@ -108,9 +110,9 @@ function SplashList() {
         <>
           <button
             className="border-2 border-blue-300 px-3 py-1 font-semibold text-blue-500 text-lg mx-1 rounded-lg"
-            onClick={() => router.push(`/splash/add-form?editId=${row._id}`)}
+            onClick={() => router.push(`/splash/${row._id}`)}
           >
-            <CiEdit />
+            <FaEye />
           </button>
           <button
             className="border-2 border-red-300 px-3 py-1 font-semibold text-red-500 text-lg mx-1 rounded-lg"
