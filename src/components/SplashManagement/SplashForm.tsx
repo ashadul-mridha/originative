@@ -8,6 +8,7 @@ import { BsSendPlusFill } from "react-icons/bs";
 import RichTextEditor from "../FormField/RichTextEditor";
 import ImageUploadInput from "../FormField/ImageUploadInput";
 import SelectInput from "../FormField/SelectInput";
+import TextArea from "../FormField/TextArea";
 
 interface InitialOptions {
   value: string;
@@ -235,13 +236,13 @@ function SplashForm() {
                 allowCount={1}
                 allowedExtensions={["jpg", "png", "jpeg"]}
                 onImagesChange={handleLogoChange}
-                value={[`${process.env.NEXT_PUBLIC_IMAGE_URL}${formData.logo}`]}
+                value={logos}
               />
             </div>
           </div>
 
           <div className="w-full my-3">
-            <div className="my-8">
+            {/* <div className="my-8">
               <RichTextEditor
                 name="description"
                 title="Description"
@@ -251,6 +252,17 @@ function SplashForm() {
                 onChange={(content) => {
                   handleChange("description", content);
                 }}
+              />
+            </div> */}
+            <div className="my-8">
+              <TextArea
+                placeholder="Example"
+                type="text"
+                title="Description"
+                required={false}
+                name="description"
+                onChange={(value: string) => handleChange("description", value)}
+                value={formData.description}
               />
             </div>
           </div>
@@ -268,7 +280,7 @@ function SplashForm() {
                   <span className="text-2xl">
                     <BsSendPlusFill />
                   </span>{" "}
-                  {editId ? "Update": "Submit"}
+                  {editId ? "Update" : "Submit"}
                 </>
               )}
             </button>

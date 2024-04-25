@@ -133,11 +133,7 @@ function SplashDetails() {
           </div>
           <div className="grid lg:grid-cols-1 md:grid-cols-1 sm:grid-cols-1 gap-4 p-3">
             <div className="font-bold ">
-              Description:{" "}
-              <b
-                className="font-normal"
-                dangerouslySetInnerHTML={{ __html: splash?.description }}
-              ></b>
+              Description: <b className="font-normal">{splash?.description}</b>
             </div>
           </div>
           <div className="flex justify-between my-3">
