@@ -20,7 +20,6 @@ function SplashDetails() {
     description: "",
     logo: "",
     images: "",
-    __v: 0,
   });
   const [routerId, setRouterId] = useState<string | string[]>("");
   const router = useRouter();

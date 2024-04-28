@@ -82,13 +82,6 @@ function SplashList() {
     },
     { name: "Title", selector: "title" },
     { name: "Type", selector: "type" },
-    // {
-    //   name: "Description",
-    //   selector: "description",
-    //   cell: (row: any) => (
-    //     <div className=" flex-wrap" dangerouslySetInnerHTML={{ __html: row.description }}></div>
-    //   ),
-    // },
     {
       name: "Status",
       selector: "is_active",

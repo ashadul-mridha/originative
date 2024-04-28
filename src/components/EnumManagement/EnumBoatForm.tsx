@@ -7,11 +7,10 @@ import { BsSendPlusFill } from "react-icons/bs";
 import { MdCancel, MdDelete } from "react-icons/md";
 import { FaPlus } from "react-icons/fa";
 
-function EnumForm() {
-  const [keyValue, setKeyValue] = useState<any>([]);
+function EnumBoatForm() {
+  const [keyValue, setKeyValue] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const { formData, handleChange, reset } = useForm({
-    key: "",
     value: [],
   });
   const router = useRouter();
@@ -48,14 +47,10 @@ function EnumForm() {
       e.preventDefault();
       setLoading(true);
       try {
-        const payload = {
-          key: formData.key?.trim(),
-          values: keyValue,
-        };
         await handleResource({
-          method: editId ? "patch" : "post",
-          endpoint: editId ? `enum/${editId}` : "enum",
-          data: payload,
+          method: "post",
+          endpoint: "enum/boat-made-by",
+          data: keyValue,
           isMultipart: false,
           popupMessage: true,
           popupText: editId
@@ -72,8 +67,12 @@ function EnumForm() {
   );
 
   const handleAdd = useCallback(() => {
-    if (formData?.value?.trim() !== "") {
-      setKeyValue((prevKeyValue: any) => [...prevKeyValue, formData.value]);
+    if (formData.value.trim() !== "") {
+      setKeyValue((prevKeyValue: string[]) => [
+        ...prevKeyValue,
+        formData.value,
+      ]);
+      reset({ ...formData, value: "" });
     }
   }, [formData.value, reset]);
 
@@ -100,18 +99,6 @@ function EnumForm() {
           </div>
           <hr className="border-gray-300 my-3 border-1" />
           <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-4">
-            <div>
-              <TextField
-                placeholder="Example"
-                type="text"
-                title="Key"
-                required={true}
-                name="key"
-                onChange={(value: string) => handleChange("key", value)}
-                value={formData.key}
-              />
-            </div>
-
             <div>
               {!editId &&
                 keyValue.map((item: any, index: number) => (
@@ -157,7 +144,7 @@ function EnumForm() {
                     placeholder="Example"
                     type="text"
                     title={`Value`}
-                    required={editId ? false : true}
+                    required={editId || keyValue.length > 0 ? false : true}
                     name={"value"}
                     onChange={(value: string) => handleChange(`value`, value)}
                     value={formData.value || ""}
@@ -165,23 +152,17 @@ function EnumForm() {
                 </div>
                 <button
                   type="button"
-                  onClick={
-                    formData.value &&
-                    typeof formData.value === "string" &&
-                    formData.value.trim() !== ""
-                      ? handleAdd
-                      : undefined
-                  }
+                  onClick={handleAdd}
                   disabled={
                     !formData.value ||
                     typeof formData.value !== "string" ||
-                    formData.value.trim() === ""
+                    !formData.value.trim()
                   }
                   className={`h-8 px-3 py-1.5 font-semibold border rounded-full flex items-end gap-4
                   ${
                     !formData.value ||
                     typeof formData.value !== "string" ||
-                    formData.value.trim() === ""
+                    !formData.value.trim()
                       ? "text-gray-500 border-gray-400 cursor-not-allowed"
                       : "text-blue-700 border-blue-700 hover:bg-blue-100 hover:text-blue-800"
                   }`}
@@ -229,4 +210,4 @@ function EnumForm() {
   );
 }
 
-export default EnumForm;
+export default EnumBoatForm;

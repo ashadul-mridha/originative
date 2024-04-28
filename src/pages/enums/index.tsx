@@ -10,7 +10,13 @@ function index() {
         <title>Enum List</title>
       </Head>
       <div className="px-4">
-        <PageHeader title={"Enum"} text={"Enum List"} url="/enums/add-form" />
+        <PageHeader
+          titleTwo={"Delivery Address Enum"}
+          urlTwo="/enums/add-address-enum"
+          text={"Enum List"}
+          title={"Boat Enum"}
+          url="/enums/add-boat-enum"
+        />
         <EnumList />
       </div>
     </>
