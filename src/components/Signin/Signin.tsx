@@ -9,9 +9,10 @@ import { handleResource } from "@/utils/APIRequester";
 // import { adminSliceData } from "../../../app/feature/userSlice";
 import Loader from "../Common/Loader";
 import TextField from "../FormField/TextField";
-import { userSliceData } from "../../../app/feature/userSlice";
+import { userSliceData } from "../../../app/feature/adminSlice";
+import PasswordField from "../FormField/PasswordField";
 
-function Index() {
+function Signin() {
   const [loading, setLoading] = useState(false);
   let token: string | null = "" || null;
 
@@ -28,7 +29,7 @@ function Index() {
   const dispatch = useDispatch();
 
   const { formData, handleChange } = useForm({
-    phone: "",
+    email: "",
     password: "",
   });
 
@@ -38,16 +39,23 @@ function Index() {
     try {
       const result = await handleResource({
         method: "post",
-        endpoint: "users/signin",
+        endpoint: "auth/admin/login",
         data: formData,
         isMultipart: false,
       });
-      Cookies.set(`${process.env.NEXT_PUBLIC_TOKEN_NAME}`, result.token, {});
+      console.log("result", result);
+      Cookies.set(
+        `${process.env.NEXT_PUBLIC_TOKEN_NAME}`,
+        result.access_token,
+        {}
+      );
       dispatch(
         userSliceData({
-          id: result.results._id,
-          name: result.results.name,
-          phone: result.results.phone,
+          id: result.data._id,
+          first_name: result.data.first_name,
+          last_name: result.data.last_name,
+          email: result.data.email,
+          phone: result.data.phone,
         })
       );
 
@@ -71,19 +79,19 @@ function Index() {
             <div>
               <TextField
                 placeholder="example@example.com"
-                type="phone"
+                type="email"
                 title="Email"
                 required={true}
-                name="phone"
-                onChange={(value: string) => handleChange("phone", value)}
-                value={formData.phone}
+                name="email"
+                onChange={(value: string) => handleChange("email", value)}
+                value={formData.email}
               />
             </div>
 
             <div>
-              <TextField
+              <PasswordField
                 placeholder="********"
-                type="password"
+                // type="password"
                 title="Password"
                 required={true}
                 name="password"
@@ -117,4 +125,4 @@ function Index() {
   );
 }
 
-export default Index;
+export default Signin;
