@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../app/store";
 import { FaUserCheck } from "react-icons/fa";
 import { RiUserSettingsFill } from "react-icons/ri";
 import { FaSignOutAlt } from "react-icons/fa";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../app/store";
 
 interface MenuProps {
   mobileMenu?: boolean;
@@ -15,8 +15,12 @@ interface MenuProps {
 
 function Header({ setMobileMenu }: MenuProps) {
   const router = useRouter();
-  // const name = useSelector((state: RootState) => state.userData.name);
-  // const phone = useSelector((state: RootState) => state.userData.phone);
+  const first_name = useSelector(
+    (state: RootState) => state.adminData.first_name
+  );
+  const last_name = useSelector(
+    (state: RootState) => state.adminData.last_name
+  );
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -71,12 +75,12 @@ function Header({ setMobileMenu }: MenuProps) {
               className="flex justify-end items-center gap-x-2 w-full px-4 py-2 font-lg text-black hover:text-[#0372DE] text-lg border-b-2 border-t-2 border-gray-400 p-3"
             >
               <FaUserCheck />
-              {/* <span className="text-black hover:text-[#0372DE] flex items-center">
-                {name || phone}{" "}
+              <span className="text-black hover:text-[#0372DE] flex items-center">
+                {first_name} {last_name}
                 <span className="ms-3">
                   {!isOpen ? <FaChevronDown /> : <FaChevronUp />}
                 </span>
-              </span> */}
+              </span>
             </button>
           </>
 
