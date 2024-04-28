@@ -9,9 +9,19 @@ interface PageHeaderProps {
   url?: string;
   module?: string;
   icon?: any;
+  titleTwo?: string;
+  urlTwo?: string;
 }
 
-function PageHeader({ title, text, url, module, icon }: PageHeaderProps) {
+function PageHeader({
+  title,
+  text,
+  url,
+  module,
+  icon,
+  titleTwo,
+  urlTwo,
+}: PageHeaderProps) {
   const router = useRouter();
 
   return (
@@ -24,14 +34,24 @@ function PageHeader({ title, text, url, module, icon }: PageHeaderProps) {
           </div>
           {/* <div>{title}</div> */}
         </div>
-        {url && (
-          <button
-            className="px-6 py-2 bg-[#3989d3] rounded-lg text-white flex items-center gap-x-3 font-semibold"
-            onClick={() => router.push(url)}
-          >
-            <FaPlus /> Add {title}
-          </button>
-        )}
+        <div className="flex justify-center items-center gap-3">
+          {url && (
+            <button
+              className="px-6 py-2 bg-[#3989d3] rounded-lg text-white flex items-center gap-x-3 font-semibold"
+              onClick={() => router.push(url)}
+            >
+              <FaPlus /> Add {title}
+            </button>
+          )}
+          {urlTwo && (
+            <button
+              className="px-6 py-2 bg-[#3989d3] rounded-lg text-white flex items-center gap-x-3 font-semibold"
+              onClick={() => router.push(urlTwo)}
+            >
+              <FaPlus /> Add {titleTwo}
+            </button>
+          )}
+        </div>
       </div>
       {/* <hr className="border-gray-300 my-3 border-1" /> */}
     </>

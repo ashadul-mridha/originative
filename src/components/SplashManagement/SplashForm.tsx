@@ -5,7 +5,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import TextField from "../FormField/TextField";
 import { MdCancel } from "react-icons/md";
 import { BsSendPlusFill } from "react-icons/bs";
-import RichTextEditor from "../FormField/RichTextEditor";
 import ImageUploadInput from "../FormField/ImageUploadInput";
 import SelectInput from "../FormField/SelectInput";
 import TextArea from "../FormField/TextArea";
@@ -204,7 +203,6 @@ function SplashForm() {
                 required={true}
                 isMulti={false}
                 initialOptions={initialOptions}
-                // endpoint="category?searchText"
                 mapOptions={typeOptions}
                 noOptionsMessage="No matching options"
                 value={formData.type || null}
@@ -221,7 +219,11 @@ function SplashForm() {
                 required={editId ? false : true}
                 allowMultiple={false}
                 allowCount={1}
-                value={images}
+                value={
+                  editId
+                    ? [`${process.env.NEXT_PUBLIC_IMAGE_URL}${formData.image}`]
+                    : images
+                }
                 allowedExtensions={["jpg", "png", "jpeg"]}
                 onImagesChange={handleImagesChange}
               />
@@ -236,24 +238,16 @@ function SplashForm() {
                 allowCount={1}
                 allowedExtensions={["jpg", "png", "jpeg"]}
                 onImagesChange={handleLogoChange}
-                value={logos}
+                value={
+                  editId
+                    ? [`${process.env.NEXT_PUBLIC_IMAGE_URL}${formData.logo}`]
+                    : logos
+                }
               />
             </div>
           </div>
 
           <div className="w-full my-3">
-            {/* <div className="my-8">
-              <RichTextEditor
-                name="description"
-                title="Description"
-                required={false}
-                value={formData.description}
-                initialValue={formData.description}
-                onChange={(content) => {
-                  handleChange("description", content);
-                }}
-              />
-            </div> */}
             <div className="my-8">
               <TextArea
                 placeholder="Example"
@@ -289,8 +283,6 @@ function SplashForm() {
               className="border border-red-500 text-red-500 px-6 py-2 mx-2 font-semibold rounded-md flex items-center gap-x-3"
               type="button"
               onClick={() => {
-                // editId
-                //   ? router.push("/splash/" + editId) :
                 router.push("/splash");
               }}
             >
