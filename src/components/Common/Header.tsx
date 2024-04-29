@@ -21,6 +21,9 @@ function Header({ setMobileMenu }: MenuProps) {
   const last_name = useSelector(
     (state: RootState) => state.adminData.last_name
   );
+  const email = useSelector(
+    (state: RootState) => state.adminData.email
+  );
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -76,7 +79,8 @@ function Header({ setMobileMenu }: MenuProps) {
             >
               <FaUserCheck />
               <span className="text-black hover:text-[#0372DE] flex items-center">
-                {first_name} {last_name}
+                {/* {first_name} {last_name} */}
+                {email}
                 <span className="ms-3">
                   {!isOpen ? <FaChevronDown /> : <FaChevronUp />}
                 </span>

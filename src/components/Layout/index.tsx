@@ -7,6 +7,9 @@ import Loader from "../Common/Loader";
 // import { handleResource } from "@/utils/APIRequester";
 // import { userSliceData } from "../../../app/feature/userSlice";
 import Header from "../Common/Header";
+import { handleResource } from "@/utils/APIRequester";
+import { useDispatch } from "react-redux";
+import { userSliceData } from "../../../app/feature/adminSlice";
 
 interface LayoutProps {
   children: ReactNode;
@@ -14,43 +17,46 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const router = useRouter();
-  // const dispatch = useDispatch();
-  // const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [mobileMenu, setMobileMenu] = useState(false);
 
-  // const getProfile = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const result = await handleResource({
-  //       method: "get",
-  //       endpoint: "users/profile",
-  //     });
-  //     if (result) {
-  //       dispatch(
-  //         userSliceData({
-  //           id: result.user.id,
-  //           name: result.user.name,
-  //           phone: result.user.phone,
-  //         })
-  //       );
-  //     } else {
-  //       router.push("/signin");
-  //     }
-  //   } catch (error) {
-  //     if (error) {
-  //       router.push("/signin");
-  //     }
-  //   }
-  //   setLoading(false);
-  // };
+  const getProfile = async () => {
+    setLoading(true);
+    try {
+      const result = await handleResource({
+        method: "get",
+        endpoint: "auth/validate-token",
+      });
+      console.log('result', result)
+      if (result) {
+        dispatch(
+          userSliceData({
+            id: result._id,
+            // first_name: result.first_name,
+            // last_name: result.last_name,
+            email: result.email,
+            // phone: result.phone,
+          })
+        );
+      } else {
+        router.push("/signin");
+      }
+    } catch (error) {
+      if (error) {
+        router.push("/signin");
+      }
+    }
+    setLoading(false);
+  };
 
-  // useEffect(() => {
-  //   getProfile();
-  // }, []);
+  useEffect(() => {
+    getProfile();
+  }, []);
 
-  // if (loading) {
-  //   return <Loader />;
-  // }
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <>
