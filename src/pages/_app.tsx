@@ -8,18 +8,6 @@ import { Provider } from "react-redux";
 import { store } from "../../app/store";
 
 function MyApp({ Component, pageProps, router }: AppProps) {
-  // return (
-  //   <>
-  //     <Head>
-  //       <link className="rounded-full" rel="icon" href="/assets/favicon.png" />
-  //     </Head>
-
-  //     <Layout>
-  //       <Component {...pageProps} />
-  //     </Layout>
-  //   </>
-  // );
-
   let token: string | null = "" || null;
 
   useEffect(() => {
