@@ -1,15 +1,8 @@
-// import { CiShop } from "react-icons/ci";
-// import { TbShoppingCartSearch } from "react-icons/tb";
-// import { MdOutlineProductionQuantityLimits } from "react-icons/md";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 // import logo from "../../../public/assets/logo.jpg";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import HamburgerMenu from "./HamburgerMenu";
-// import { useDispatch, useSelector } from "react-redux";
-// import { RootState } from "../../../app/store";
-// import { handleResource } from "@/utils/APIRequester";
-// import { resetCartUpdated } from "../../../app/feature/cartSlice";
 // import Image from "next/image";
 // import Header from "./Header";
 // import { MdOutlineConnectWithoutContact } from "react-icons/md";
@@ -33,31 +26,6 @@ import { MdOutlineNotificationImportant } from "react-icons/md";
 const Sidebar = () => {
   const [mobileMenu, setMobileMenu] = useState(false);
   const router = useRouter();
-  // const dispatch = useDispatch();
-
-  // const [cartCount, setCartCount] = useState(0);
-  // const userId = useSelector((state: RootState) => state.userData.id);
-  // const cart = useSelector((state: RootState) => state.cart.cartUpdated);
-
-  // const getCartList = async () => {
-  //   try {
-  //     const res = await handleResource({
-  //       method: "get",
-  //       endpoint: `cart?page=1&limit=50&user_id=${userId}`,
-  //       isMultipart: false,
-  //     });
-  //     setCartCount(res.pagination.total);
-  //     dispatch(resetCartUpdated());
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (userId || cart) {
-  //     getCartList();
-  //   }
-  // }, [userId, cart]);
 
   const Menus = [
     {
@@ -90,11 +58,11 @@ const Sidebar = () => {
       path: "/fuels",
       src: <BsFuelPump />,
     },
-    // {
-    //   title: "Boats",
-    //   path: "/boats",
-    //   src: <IoBoatOutline />,
-    // },
+    {
+      title: "Boats",
+      path: "/boats",
+      src: <IoBoatOutline />,
+    },
     // {
     //   title: "Refueling Boats",
     //   path: "/refueling-boats",
@@ -105,11 +73,11 @@ const Sidebar = () => {
     //   path: "/tipping",
     //   src: <MdMultipleStop />,
     // },
-    // {
-    //   title: "Coupons",
-    //   path: "/coupons",
-    //   src: <RiCoupon3Line />,
-    // },
+    {
+      title: "Coupons",
+      path: "/coupons",
+      src: <RiCoupon3Line />,
+    },
     // {
     //   title: "Chats",
     //   path: "/chats",
@@ -125,21 +93,21 @@ const Sidebar = () => {
     //   path: "/customer-support",
     //   src: <MdOutlineSupportAgent />,
     // },
-    // {
-    //   title: "Service Workers",
-    //   path: "/service-worker",
-    //   src: <GrUserWorker />,
-    // },
+    {
+      title: "Service Workers",
+      path: "/service-worker",
+      src: <GrUserWorker />,
+    },
     // {
     //   title: "Service Worker Withdrawal",
     //   path: "/service-worker-withdrawal",
     //   src: <IoBoatOutline />,
     // },
-    // {
-    //   title: "Admins",
-    //   path: "/admins",
-    //   src: <GrUserAdmin />,
-    // },
+    {
+      title: "Admins",
+      path: "/admins",
+      src: <GrUserAdmin />,
+    },
   ];
 
   return (

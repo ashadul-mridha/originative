@@ -1,5 +1,5 @@
-import BoatList from "@/components/BoatManagement/BoatList";
 import PageHeader from "@/components/Common/PageHeader";
+import ServiceWorkerList from "@/components/ServiceWorker/ServiceWorkerList";
 import Head from "next/head";
 import React from "react";
 
@@ -7,11 +7,11 @@ function index() {
   return (
     <>
       <Head>
-        <title>Boats List</title>
+        <title>Service Worker List</title>
       </Head>
       <div className="px-4">
-        <PageHeader title={"Boats"} text={"Boats List"}  />
-        <BoatList />
+        <PageHeader title={"Service Worker"} text={"Service Worker List"} />
+        <ServiceWorkerList />
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-import BoatList from "@/components/BoatManagement/BoatList";
+import AdminList from "@/components/AdminManagement/AdminList";
 import PageHeader from "@/components/Common/PageHeader";
 import Head from "next/head";
 import React from "react";
@@ -7,11 +7,15 @@ function index() {
   return (
     <>
       <Head>
-        <title>Boats List</title>
+        <title>Admin List</title>
       </Head>
       <div className="px-4">
-        <PageHeader title={"Boats"} text={"Boats List"}  />
-        <BoatList />
+        <PageHeader
+          title={"Admin"}
+          text={"Admin List"}
+          url="/admins/add-form"
+        />
+        <AdminList />
       </div>
     </>
   );

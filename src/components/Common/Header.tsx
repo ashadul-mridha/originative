@@ -21,9 +21,7 @@ function Header({ setMobileMenu }: MenuProps) {
   const last_name = useSelector(
     (state: RootState) => state.adminData.last_name
   );
-  const email = useSelector(
-    (state: RootState) => state.adminData.email
-  );
+  const email = useSelector((state: RootState) => state.adminData.email);
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
