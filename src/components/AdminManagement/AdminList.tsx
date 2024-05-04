@@ -103,20 +103,20 @@ function AdminList() {
     {
       name: "Status",
       selector: "is_active",
-      // cell: (row: any) => (row.is_active === true ? "Active" : "Inactive"),
-      cell: (row: any) => (
-        <select
-          className={`font-semibold ${
-            (row.is_active && "text-green-500") ||
-            (!row.is_active && "text-red-500")
-          }`}
-          value={row.is_active ? "active" : "inactive"}
-          onChange={(e) => handleUpdateStatus(row._id, e.target.value)}
-        >
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-        </select>
-      ),
+      cell: (row: any) => (row.is_active === true ? "Active" : "Inactive"),
+      // cell: (row: any) => (
+      //   <select
+      //     className={`font-semibold ${
+      //       (row.is_active && "text-green-500") ||
+      //       (!row.is_active && "text-red-500")
+      //     }`}
+      //     value={row.is_active ? "active" : "inactive"}
+      //     onChange={(e) => handleUpdateStatus(row._id, e.target.value)}
+      //   >
+      //     <option value="active">Active</option>
+      //     <option value="inactive">Inactive</option>
+      //   </select>
+      // ),
     },
     {
       name: "Created At",

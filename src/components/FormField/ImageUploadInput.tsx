@@ -145,6 +145,10 @@ const ImageUploadInput: React.FC<ImageUploadInputProps> = ({
             </button>
           </li>
         ))}
+        <div className="flex justify-between items-center text-red-500 font-semibold">
+          <p>Max Image: {allowCount}</p>
+          <p>Allow Images: {allowedExtensions?.join(", ")}</p>
+        </div>
         {selectedFiles.length <= 0 &&
           value?.map((file, index) => (
             <li key={index} className="flex items-center">

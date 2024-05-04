@@ -82,29 +82,107 @@ function SplashForm() {
     getData();
   }, [editId]);
 
+  // const updateData = async () => {
+  //   try {
+  //     const payload = {
+  //       title: formData.title?.trim(),
+  //       description: formData.description,
+  //     };
+  //     await handleResource({
+  //       method: "patch",
+  //       endpoint: `splash/${editId}`,
+  //       data: payload,
+  //       isMultipart: false,
+  //       popupMessage: true,
+  //       popupText: "Splash Updated Successfully !",
+  //     });
+  //     setLoading(false);
+  //     router.push("/splash");
+  //   } catch (error) {
+  //     setLoading(false);
+  //   }
+  // };
+
   const updateData = async () => {
-    try {
-      const payload = {
-        title: formData.title?.trim(),
-        description: formData.description,
-      };
-      await handleResource({
-        method: "patch",
-        endpoint: `splash/${editId}`,
-        data: payload,
-        isMultipart: false,
-        popupMessage: true,
-        popupText: "Splash Updated Successfully !",
+    if (logos.length > 0 && images.length > 0) {
+      const imagesPayload = new FormData();
+
+      images?.forEach((image: any) => {
+        if (image.image instanceof File) {
+          imagesPayload.append(`image`, image.image);
+        }
       });
-      setLoading(false);
-      router.push("/splash");
-    } catch (error) {
-      setLoading(false);
+
+      logos?.forEach((image: any) => {
+        if (image.image instanceof File) {
+          imagesPayload.append(`logo`, image.image);
+        }
+      });
+
+      try {
+        const response = await handleResource({
+          method: "post",
+          endpoint: "image-library",
+          data: imagesPayload,
+          isMultipart: true,
+        });
+
+        if (response.data) {
+          let logo = "";
+          let image = "";
+          response.data.forEach((item: any) => {
+            if (item.fieldName === "logo") {
+              logo = item.fileName;
+            } else {
+              image = item.fileName;
+            }
+          });
+
+          const payload = {
+            title: formData.title?.trim(),
+            type: formData.type,
+            description: formData.description,
+            images: image,
+            logo: logo,
+          };
+          await handleResource({
+            method: "patch",
+            endpoint: `splash/${editId}`,
+            data: payload,
+            isMultipart: false,
+            popupMessage: true,
+            popupText: "Splash Updated Successfully !",
+          });
+          setLoading(false);
+          router.push("/splash");
+        }
+      } catch (error) {
+        setLoading(false);
+      }
+    } else {
+      try {
+        const payload = {
+          title: formData.title?.trim(),
+          description: formData.description,
+        };
+        await handleResource({
+          method: "patch",
+          endpoint: `splash/${editId}`,
+          data: payload,
+          isMultipart: false,
+          popupMessage: true,
+          popupText: "Splash Updated Successfully !",
+        });
+        setLoading(false);
+        router.push("/splash");
+      } catch (error) {
+        setLoading(false);
+      }
     }
   };
 
   const createData = async () => {
-    if (logos && images) {
+    if (logos.length > 0 && images.length > 0) {
       const imagesPayload = new FormData();
 
       logos?.forEach((logo: any) => {
@@ -161,6 +239,7 @@ function SplashForm() {
       }
     }
   };
+
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();

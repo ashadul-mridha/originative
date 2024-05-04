@@ -112,9 +112,14 @@ function SplashDetails() {
               Image:{" "}
               <b className="font-normal text-blue-600">
                 <span>
-                  <a href={splash.images} target="_blank">
+                  {/* <a href={splash.images} target="_blank">
                     Image
-                  </a>
+                  </a> */}
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${splash.images}`}
+                    className="w-32 h-16 text-center"
+                    alt={splash.title}
+                  />
                 </span>
               </b>
             </div>
@@ -123,9 +128,14 @@ function SplashDetails() {
               Logo:{" "}
               <b className="font-normal text-blue-600">
                 <span>
-                  <a href={splash.logo} target="_blank">
+                  {/* <a href={splash.logo} target="_blank">
                     Logo
-                  </a>
+                  </a> */}
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${splash.logo}`}
+                    className="w-32 h-16 text-center"
+                    alt={splash.title}
+                  />
                 </span>
               </b>
             </div>
