@@ -3,19 +3,28 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 import Layout from "@/components/Layout";
 import Cookies from "js-cookie";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { Provider } from "react-redux";
 import { store } from "../../app/store";
+import Loader from "@/components/Common/Loader";
 
-function MyApp({ Component, pageProps, router }: AppProps) {
-  let token: string | null = "" || null;
+function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState("");
 
   useEffect(() => {
-    const token = Cookies.get(`${process.env.NEXT_PUBLIC_TOKEN_NAME}`);
-    if (!token) {
+    const tokenFromCookie = Cookies.get(
+      `${process.env.NEXT_PUBLIC_TOKEN_NAME}`
+    );
+    if (!tokenFromCookie) {
       router.push("/signin");
+    } else {
+      setToken(tokenFromCookie);
+      setLoading(false);
     }
-  }, [token]);
+  }, [router, token]);
 
   const pagesWithoutLayout = ["/signin"];
 
@@ -26,7 +35,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   return shouldRenderWithoutLayout ? (
     <>
       <Head>
-        <link className="rounded-full" rel="icon" href="/assets/favicon.png" />
+        <link rel="icon" href="/assets/favicon.png" />
       </Head>
       <Provider store={store}>
         <Component {...pageProps} />
@@ -35,13 +44,19 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   ) : (
     <>
       <Head>
-        <link className="rounded-full" rel="icon" href="/assets/favicon.png" />
+        <link rel="icon" href="/assets/favicon.png" />
       </Head>
-      <Provider store={store}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </Provider>
+      {loading ? (
+        <div>
+          <Loader />
+        </div>
+      ) : (
+        <Provider store={store}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </Provider>
+      )}
     </>
   );
 }

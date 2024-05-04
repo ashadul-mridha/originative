@@ -27,8 +27,9 @@ const Layout = ({ children }: LayoutProps) => {
       const result = await handleResource({
         method: "get",
         endpoint: "auth/validate-token",
+        popupMessage: false,
       });
-      console.log("result", result);
+
       if (result) {
         dispatch(
           userSliceData({

@@ -116,7 +116,7 @@ function AdminForm() {
           email: formData.email,
           phone_code: formData.phone_code,
           phone_number: formData.phone_number,
-          password: formData.password,
+          password: formData.password && formData.password,
         };
         await handleResource({
           method: "patch",
@@ -163,7 +163,7 @@ function AdminForm() {
             email: formData.email,
             phone_code: formData.phone_code,
             phone_number: formData.phone_number,
-            password: formData.password,
+            password: formData.password && formData.password,
             image: image,
           };
 
@@ -202,7 +202,7 @@ function AdminForm() {
       <div className="px-5">
         <form onSubmit={handleSubmit} className="">
           <div className="text-2xl font-bold my-3 flex items-center gap-x-3">
-            {editId ? "Update" : "Add"} Coupon
+            {editId ? "Update" : "Add"} Admin
           </div>
           <hr className="border-gray-300 my-3 border-1" />
           <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-4">

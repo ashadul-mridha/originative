@@ -84,6 +84,8 @@ export const handleResource = async ({
   } catch (error) {
     console.log("error", error);
     if (
+      endpoint !== "auth/validate-token" &&
+      endpoint !== "auth/admin/login" &&
       error instanceof Error &&
       "response" in error &&
       error.response !== undefined
