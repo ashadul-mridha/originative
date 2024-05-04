@@ -3,24 +3,20 @@ import { handleResource } from "@/utils/APIRequester";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import TextField from "../FormField/TextField";
-import { MdCancel } from "react-icons/md";
 import { BsSendPlusFill } from "react-icons/bs";
-import RichTextEditor from "../FormField/RichTextEditor";
-import ImageUploadInput from "../FormField/ImageUploadInput";
+import { MdCancel } from "react-icons/md";
+import DatePickerInput from "../FormField/DatePickerInput";
+import NumberInput from "../FormField/NumberInput";
 
-function BoatForm() {
+function CouponForm() {
   const [loading, setLoading] = useState(false);
-  const [images,setImages]=useState<any>([])
   const { formData, handleChange, reset } = useForm({
-    user_id: "",
     title: "",
-    made_by: "",
-    model: "",
-    license_plate_no: "",
-    fuel_id: "",
-    images: [""],
+    coupon_code: "",
+    discount_value: 0,
+    start_date: new Date().toISOString(),
+    end_date: new Date(Date.now() + 86_400_000 * 15).toISOString(),
   });
-
   const router = useRouter();
   const [editId, setEditId] = useState<string | string[] | null>(null);
 
@@ -30,27 +26,23 @@ function BoatForm() {
     }
   }, [router.query]);
 
-  const handleImagesChange = (selectedImages: File[]) => {
-    const newImages = selectedImages.map((image) => ({
-      image,
-    }));
-    setImages( newImages);
-  };
-
   const getData = useCallback(async () => {
     if (!editId) return;
+    setLoading(true);
     const response = await handleResource({
       method: "get",
-      endpoint: "splash/" + editId,
+      endpoint: "coupon/" + editId,
     });
 
     if (response.data) {
       reset({
-        title: response.title,
-        description: response.description,
-        image: response.image,
-        logo: response.logo,
+        title: response.data.title,
+        coupon_code: response.data.coupon_code,
+        discount_value: response.data.discount_value,
+        start_date: response.data.start_date,
+        end_date: response.data.end_date,
       });
+      setLoading(false);
     }
   }, [editId, reset]);
 
@@ -61,22 +53,20 @@ function BoatForm() {
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      const payload = {
-        title: formData.title?.trim(),
-        description: formData.description,
-        image: formData.image,
-        logo: formData.logo,
-      };
       try {
         setLoading(true);
         await handleResource({
           method: editId ? "patch" : "post",
-          endpoint: editId ? `splash/${editId}` : "splash",
-          data: payload,
+          endpoint: editId ? `coupon/${editId}` : "coupon",
+          data: formData,
           isMultipart: false,
+          popupMessage: true,
+          popupText: editId
+            ? "Coupon Updated Successfully !"
+            : "Coupon Added Successfully !",
         });
         setLoading(false);
-        router.push("/splash");
+        router.push("/coupons");
       } catch (error) {
         setLoading(false);
       }
@@ -89,7 +79,7 @@ function BoatForm() {
       <div className="px-5">
         <form onSubmit={handleSubmit} className="">
           <div className="text-2xl font-bold my-3 flex items-center gap-x-3">
-            {editId ? "Update" : "Add"} Boat
+            {editId ? "Update" : "Add"} Coupon
           </div>
           <hr className="border-gray-300 my-3 border-1" />
           <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-4">
@@ -104,43 +94,57 @@ function BoatForm() {
                 value={formData.title}
               />
             </div>
-
             <div>
               <TextField
                 placeholder="Example"
                 type="text"
-                title="Model"
+                title="Coupon Code"
                 required={true}
-                name="model"
-                onChange={(value: string) => handleChange("model", value)}
-                value={formData.model}
+                name="coupon_code"
+                onChange={(value: string) => handleChange("coupon_code", value)}
+                value={formData.coupon_code}
               />
             </div>
 
             <div>
-              <TextField
-                placeholder="Example"
-                type="text"
-                title="License Plate"
+              <DatePickerInput
+                name="start_date"
+                title="Start Date"
                 required={true}
-                name="license_plate_no"
-                onChange={(value: string) =>
-                  handleChange("license_plate_no", value)
+                placeholder="Select Date"
+                minDate={new Date()}
+                value={new Date(formData.start_date)}
+                onChange={(selectedDate) =>
+                  handleChange("start_date", selectedDate?.toISOString())
                 }
-                value={formData.license_plate_no}
               />
             </div>
 
             <div>
-              <ImageUploadInput
-                title="Image"
-                name="image"
-                required={editId ? false : true}
-                allowMultiple={false}
-                allowCount={1}
-                value={formData?.images}
-                allowedExtensions={["jpg", "png", "jpeg"]}
-                onImagesChange={handleImagesChange}
+              <DatePickerInput
+                name="end_date"
+                title="End Date"
+                required={true}
+                placeholder="Select Date"
+                minDate={new Date(formData.start_date)}
+                value={new Date(formData.end_date)}
+                onChange={(selectedDate) => {
+                  handleChange("end_date", selectedDate?.toISOString());
+                }}
+              />
+            </div>
+
+            <div>
+              <NumberInput
+                name="price"
+                title="Discount Price"
+                type="float"
+                required={true}
+                placeholder="Enter Discount Price"
+                value={formData.discount_value}
+                onChange={(value) => {
+                  handleChange("discount_value", value);
+                }}
               />
             </div>
           </div>
@@ -158,7 +162,7 @@ function BoatForm() {
                   <span className="text-2xl">
                     <BsSendPlusFill />
                   </span>{" "}
-                  Submit
+                  {editId ? "Update" : "Submit"}
                 </>
               )}
             </button>
@@ -167,9 +171,7 @@ function BoatForm() {
               className="border border-red-500 text-red-500 px-6 py-2 mx-2 font-semibold rounded-md flex items-center gap-x-3"
               type="button"
               onClick={() => {
-                editId
-                  ? router.push("/flight/" + editId)
-                  : router.push("/flight");
+                router.push("/coupons");
               }}
             >
               <span className="text-2xl">
@@ -184,4 +186,4 @@ function BoatForm() {
   );
 }
 
-export default BoatForm;
+export default CouponForm;

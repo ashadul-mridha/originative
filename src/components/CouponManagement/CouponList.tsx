@@ -1,28 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { MdDelete } from "react-icons/md";
-import { FaEye } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import ReusableTable from "../FormField/ReusableTable";
 import { useRouter } from "next/router";
 import { handleResource } from "@/utils/APIRequester";
-import ReusableTable from "../FormField/ReusableTable";
+import { MdDelete } from "react-icons/md";
+import { Coupon } from "@/utils/constant";
+import { CiEdit } from "react-icons/ci";
 
-import { Splash } from "@/utils/constant";
-
-function SplashList() {
-  const [splash, setSplash] = useState<Splash[]>([]);
+function CouponList() {
+  const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(25);
   const router = useRouter();
   const [pagination, setPagination] = useState<any>({});
 
-  const getSplashList = async () => {
+  const getCouponList = async () => {
     try {
       setLoading(true);
       const result = await handleResource({
         method: "get",
-        endpoint: `splash?page=${page}&limit=${limit}`,
+        endpoint: `coupon?page=${page}&limit=${limit}`,
       });
-      setSplash(result.data);
+      setCoupons(result.data);
       setPagination(result.page);
       setLoading(false);
     } catch (error) {
@@ -35,67 +34,33 @@ function SplashList() {
       setLoading(true);
       await handleResource({
         method: "delete",
-        endpoint: "splash",
+        endpoint: "coupon",
         id: row,
       });
       setLoading(false);
-      getSplashList();
+      getCouponList();
     } catch (error) {
       console.error("Error deleting item:", error);
     }
   };
 
   useEffect(() => {
-    getSplashList();
+    getCouponList();
   }, [limit, page]);
 
   const columns = [
-    {
-      name: "Image",
-      selector: "images",
-      // cell: (row: any) => (
-      //   <div style={{ whiteSpace: "pre-line" }}>
-      //     <a
-      //       className="text-blue-900 font-semibold"
-      //       href={`${process.env.NEXT_PUBLIC_IMAGE_URL}${row.images}`}
-      //       target="_blank"
-      //     >
-      //       Image
-      //     </a>
-      //   </div>
-      // ),
-      cell: (row: any) => (
-        <img
-          src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${row.images}`}
-          className="w-32 h-16 text-center"
-          alt={row.title}
-        />
-      ),
-    },
-    {
-      name: "Logo",
-      selector: "logo",
-      // cell: (row: any) => (
-      //   <div style={{ whiteSpace: "pre-line" }}>
-      //     <a
-      //       className="text-blue-900 font-semibold"
-      //       href={`${process.env.NEXT_PUBLIC_IMAGE_URL}${row.logo}`}
-      //       target="_blank"
-      //     >
-      //       Logo
-      //     </a>
-      //   </div>
-      // ),
-      cell: (row: any) => (
-        <img
-          src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${row.logo}`}
-          className="w-32 h-16 text-center"
-          alt={row.title}
-        />
-      ),
-    },
     { name: "Title", selector: "title" },
-    { name: "Type", selector: "type" },
+    { name: "Coupon Code", selector: "coupon_code" },
+    {
+      name: "Start Date",
+      selector: "start_date",
+      cell: (row: any) => new Date(row.start_date).toLocaleString(),
+    },
+    {
+      name: "End Date",
+      selector: "end_date",
+      cell: (row: any) => new Date(row.end_date).toLocaleString(),
+    },
     {
       name: "Status",
       selector: "is_active",
@@ -117,9 +82,9 @@ function SplashList() {
         <>
           <button
             className="border-2 border-blue-300 px-3 py-1 font-semibold text-blue-500 text-lg mx-1 rounded-lg"
-            onClick={() => router.push(`/splash/${row._id}`)}
+            onClick={() => router.push(`/coupons/add-form?editId=${row._id}`)}
           >
-            <FaEye />
+            <CiEdit />
           </button>
           <button
             className="border-2 border-red-300 px-3 py-1 font-semibold text-red-500 text-lg mx-1 rounded-lg"
@@ -150,7 +115,7 @@ function SplashList() {
           <div className="px-3">
             {" "}
             <ReusableTable
-              data={splash}
+              data={coupons}
               columns={columns}
               limit={limit}
               page={page}
@@ -165,4 +130,4 @@ function SplashList() {
   );
 }
 
-export default SplashList;
+export default CouponList;

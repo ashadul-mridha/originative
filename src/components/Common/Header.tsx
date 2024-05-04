@@ -21,9 +21,7 @@ function Header({ setMobileMenu }: MenuProps) {
   const last_name = useSelector(
     (state: RootState) => state.adminData.last_name
   );
-  const email = useSelector(
-    (state: RootState) => state.adminData.email
-  );
+  const email = useSelector((state: RootState) => state.adminData.email);
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -75,7 +73,7 @@ function Header({ setMobileMenu }: MenuProps) {
             <button
               type="button"
               onClick={() => setIsOpen(!isOpen)}
-              className="flex justify-end items-center gap-x-2 w-full px-4 py-2 font-lg text-black hover:text-[#0372DE] text-lg border-b-2 border-t-2 border-gray-400 p-3"
+              className="flex justify-end items-center gap-x-2 w-full px-4 py-2 font-lg text-black hover:text-[#0372DE] text-lg border-b-2 border-t-2 border-gray-400 p-3 rounded"
             >
               <FaUserCheck />
               <span className="text-black hover:text-[#0372DE] flex items-center">
@@ -89,8 +87,8 @@ function Header({ setMobileMenu }: MenuProps) {
           </>
 
           {isOpen && (
-            <div className="absolute top-full divide-y divide-gray-100 rounded-md -lg w-full shadow-md">
-              <div className="py-1">
+            <div className="absolute top-full divide-y divide-gray-100 rounded-md w-full shadow-md ">
+              <div className="py-1 text-end">
                 {options.map((option) => (
                   <button
                     key={option.link}

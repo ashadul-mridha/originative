@@ -171,7 +171,7 @@ function SplashForm() {
         createData();
       }
     },
-    [formData, editId, router]
+    [formData, editId, router, logos, images]
   );
 
   return (

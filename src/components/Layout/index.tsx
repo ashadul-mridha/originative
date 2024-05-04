@@ -28,7 +28,7 @@ const Layout = ({ children }: LayoutProps) => {
         method: "get",
         endpoint: "auth/validate-token",
       });
-      console.log('result', result)
+      console.log("result", result);
       if (result) {
         dispatch(
           userSliceData({
@@ -59,12 +59,34 @@ const Layout = ({ children }: LayoutProps) => {
   }
 
   return (
+    // <>
+    //   <div className="flex flex-auto min-h-screen">
+    //     <Sidebar />
+    //     <div className="flex-grow overflow-x-auto">
+    //       <Header setMobileMenu={setMobileMenu} mobileMenu={mobileMenu} />
+    //       <div className="m-5">{children}</div>
+    //       <footer className="text-end p-5 text-gray-600 text-sm italic">
+    //         <Footer />
+    //       </footer>
+    //     </div>
+    //   </div>
+    // </>
+
     <>
-      <div className="flex flex-auto min-h-screen">
-        <Sidebar />
-        <div className="flex-grow overflow-x-auto">
-          <Header setMobileMenu={setMobileMenu} mobileMenu={mobileMenu} />
-          <div className="m-5">{children}</div>
+      <div className="flex">
+        <div className="w-2/12 bg-[#dbdeee] min-h-screen">
+          <div className="fixed inset-y-0 left-0 w-2/12 h-full overflow-y-auto custom-scrollbar">
+            <Sidebar />
+          </div>
+        </div>
+
+        <div className="w-10/12">
+          <header>
+            <Header setMobileMenu={setMobileMenu} mobileMenu={mobileMenu} />
+          </header>
+
+          <main className="">{children}</main>
+
           <footer className="text-end p-5 text-gray-600 text-sm italic">
             <Footer />
           </footer>

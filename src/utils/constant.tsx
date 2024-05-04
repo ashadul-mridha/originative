@@ -36,3 +36,59 @@ export interface Enum {
         }
       ];
 }
+
+export interface Coupon {
+  _id:            string;
+  is_active:      boolean;
+  created_by:     null;
+  deleted_at:     null;
+  title:          string;
+  coupon_code:    string;
+  discount_value: number;
+  start_date:     Date;
+  end_date:       null;
+  created_at:     Date;
+  updated_at:     Date;
+}
+
+export interface ServiceWorker {
+  _id:          string;
+  is_active:    boolean;
+  created_by:   null;
+  deleted_at:   null;
+  email:        string;
+  phone_code:   string;
+  phone_number: string;
+  is_verified:  boolean;
+  walletInfo:   any[];
+  created_at:   Date;
+  updated_at:   Date;
+}
+
+export interface Admin {
+  _id:        string;
+  is_active:  boolean;
+  created_by: null;
+  deleted_at: null;
+  first_name: string;
+  last_name:  string;
+  email:      string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface Boat {
+  _id:              string;
+  is_active:        boolean;
+  created_by:       null;
+  deleted_at:       null;
+  user_id:          string;
+  title:            string;
+  made_by:          string;
+  model:            string;
+  license_plate_no: string;
+  fuel_id:          string;
+  images:           string[];
+  created_at:       Date;
+  updated_at:       Date;
+}
