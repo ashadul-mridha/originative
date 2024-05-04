@@ -53,12 +53,12 @@ function FuelList() {
   const columns = [
     { name: "Title", selector: "title" },
     {
-      name: "Unit(gal)",
-      selector: "unit",
-    },
-    {
       name: "Price",
       selector: "price",
+    },
+    {
+      name: "Unit(gal)",
+      selector: "unit",
     },
     {
       name: "Status",

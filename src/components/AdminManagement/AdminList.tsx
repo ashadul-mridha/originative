@@ -48,7 +48,40 @@ function AdminList() {
     getAdminList();
   }, [limit, page]);
 
+  const handleUpdateStatus = async (row: any, value: string) => {
+    try {
+      setLoading(true);
+      await handleResource({
+        method: "patch",
+        endpoint: "admin",
+        data: value === "active" ? { is_active: true } : { is_active: false },
+        id: row,
+        isMultipart: false,
+        popupMessage: true,
+        popupText:
+          value === "active"
+            ? "Admin Status Approved"
+            : "Admin Status Suspended",
+      });
+      setLoading(false);
+      getAdminList();
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
+  };
+
   const columns = [
+    {
+      name: "Image",
+      selector: "images",
+      cell: (row: any) => (
+        <img
+          src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${row.image} `}
+          className="w-32 h-16 text-center"
+          alt={row.title}
+        />
+      ),
+    },
     {
       name: "Name",
       selector: "first_name",
@@ -59,9 +92,31 @@ function AdminList() {
       selector: "email",
     },
     {
+      name: "Phone",
+      selector: "phone_number",
+      cell:(row:any)=>`${row.phone_code} ${row.phone_number}`
+    },
+    {
+      name: "Email",
+      selector: "email",
+    },
+    {
       name: "Status",
       selector: "is_active",
-      cell: (row: any) => (row.is_active === true ? "Active" : "Inactive"),
+      // cell: (row: any) => (row.is_active === true ? "Active" : "Inactive"),
+      cell: (row: any) => (
+        <select
+          className={`font-semibold ${
+            (row.is_active && "text-green-500") ||
+            (!row.is_active && "text-red-500")
+          }`}
+          value={row.is_active ? "active" : "inactive"}
+          onChange={(e) => handleUpdateStatus(row._id, e.target.value)}
+        >
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      ),
     },
     {
       name: "Created At",

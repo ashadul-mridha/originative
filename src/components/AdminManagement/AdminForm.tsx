@@ -6,15 +6,18 @@ import TextField from "../FormField/TextField";
 import { BsSendPlusFill } from "react-icons/bs";
 import { MdCancel } from "react-icons/md";
 import ImageUploadInput from "../FormField/ImageUploadInput";
+import PasswordField from "../FormField/PasswordField";
 
 function AdminForm() {
   const [loading, setLoading] = useState(false);
   const { formData, handleChange, reset } = useForm({
-    title: "",
-    coupon_code: "",
-    discount_value: 0,
-    start_date: new Date().toISOString(),
-    end_date: new Date(Date.now() + 86_400_000 * 15).toISOString(),
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_code: "880",
+    phone_number: "",
+    password: "",
+    image: "",
   });
   const router = useRouter();
   const [editId, setEditId] = useState<string | string[] | null>(null);
@@ -36,11 +39,12 @@ function AdminForm() {
 
     if (response.data) {
       reset({
-        title: response.data.title,
-        coupon_code: response.data.coupon_code,
-        discount_value: response.data.discount_value,
-        start_date: response.data.start_date,
-        end_date: response.data.end_date,
+        first_name: response.data.first_name,
+        last_name: response.data.last_name,
+        email: response.data.email,
+        phone_code: response.data.phone_code,
+        phone_number: response.data.phone_number,
+        image: response.data.image,
       });
       setLoading(false);
     }
@@ -58,7 +62,7 @@ function AdminForm() {
   };
 
   const updateData = async () => {
-    if (image) {
+    if (image && image.length > 0) {
       const imagesPayload = new FormData();
 
       image?.forEach((image: any) => {
@@ -69,68 +73,69 @@ function AdminForm() {
 
       try {
         const response = await handleResource({
-          method: editId ? "patch" : "post",
-          endpoint: editId ? `image-library/${editId}` : "image-library",
+          method: "post",
+          endpoint: "image-library",
           data: imagesPayload,
           isMultipart: true,
         });
 
         if (response.data) {
-          let logo = "";
           let image = "";
           response.data.forEach((item: any) => {
-            if (item.fieldName === "logo") {
-              logo = item.fileName;
-            } else {
-              image = item.fileName;
-            }
+            image = item.fileName;
           });
           const payload = {
-            title: formData.title?.trim(),
-            type: formData.type,
-            description: formData.description,
-            images: image,
-            logo: logo,
+            first_name: formData.first_name,
+            last_name: formData.last_name,
+            email: formData.email,
+            phone_code: formData.phone_code,
+            phone_number: formData.phone_number,
+            password: formData.password,
+            image: image,
           };
 
           await handleResource({
-            method: "post",
-            endpoint: "splash",
+            method: "patch",
+            endpoint: `admin/${editId}`,
             data: payload,
             isMultipart: false,
             popupMessage: true,
-            popupText: "Splash Created Successfully !",
+            popupText: "Admin Updated Successfully !",
           });
           setLoading(false);
-          router.push("/splash");
+          router.push("/admins");
         }
       } catch (error) {
         setLoading(false);
       }
+    } else {
+      try {
+        const payload = {
+          first_name: formData.first_name,
+          last_name: formData.last_name,
+          email: formData.email,
+          phone_code: formData.phone_code,
+          phone_number: formData.phone_number,
+          password: formData.password,
+        };
+        await handleResource({
+          method: "patch",
+          endpoint: `admin/${editId}`,
+          data: payload,
+          isMultipart: false,
+          popupMessage: true,
+          popupText: "Admin Updated Successfully !",
+        });
+        setLoading(false);
+        router.push("/admins");
+      } catch (error) {
+        setLoading(false);
+      }
     }
-
-    // try {
-    //   const payload = {
-    //     title: formData.title?.trim(),
-    //     description: formData.description,
-    //   };
-    //   await handleResource({
-    //     method: "patch",
-    //     endpoint: `admin/${editId}`,
-    //     data: payload,
-    //     isMultipart: false,
-    //     popupMessage: true,
-    //     popupText: "Admin Updated Successfully !",
-    //   });
-    //   setLoading(false);
-    //   router.push("/admins");
-    // } catch (error) {
-    //   setLoading(false);
-    // }
   };
 
   const createData = async () => {
-    if (image) {
+    if (image && image.length > 0) {
       const imagesPayload = new FormData();
 
       image?.forEach((image: any) => {
@@ -141,46 +146,44 @@ function AdminForm() {
 
       try {
         const response = await handleResource({
-          method: editId ? "patch" : "post",
-          endpoint: editId ? `image-library/${editId}` : "image-library",
+          method: "post",
+          endpoint: "image-library",
           data: imagesPayload,
           isMultipart: true,
         });
 
         if (response.data) {
-          let logo = "";
           let image = "";
           response.data.forEach((item: any) => {
-            if (item.fieldName === "logo") {
-              logo = item.fileName;
-            } else {
-              image = item.fileName;
-            }
+            image = item.fileName;
           });
           const payload = {
-            title: formData.title?.trim(),
-            type: formData.type,
-            description: formData.description,
-            images: image,
-            logo: logo,
+            first_name: formData.first_name,
+            last_name: formData.last_name,
+            email: formData.email,
+            phone_code: formData.phone_code,
+            phone_number: formData.phone_number,
+            password: formData.password,
+            image: image,
           };
 
           await handleResource({
             method: "post",
-            endpoint: "splash",
+            endpoint: "admin",
             data: payload,
             isMultipart: false,
             popupMessage: true,
-            popupText: "Splash Created Successfully !",
+            popupText: "Admin Created Successfully !",
           });
           setLoading(false);
-          router.push("/splash");
+          router.push("/admins");
         }
       } catch (error) {
         setLoading(false);
       }
     }
   };
+
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -191,7 +194,7 @@ function AdminForm() {
         createData();
       }
     },
-    [formData, editId, router]
+    [formData, editId, router, image]
   );
 
   return (
@@ -205,24 +208,61 @@ function AdminForm() {
           <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-4">
             <div>
               <TextField
-                placeholder="Example"
+                placeholder="Jhon"
                 type="text"
-                title="Title"
-                required={true}
-                name="title"
-                onChange={(value: string) => handleChange("title", value)}
-                value={formData.title}
+                title="First Name"
+                required={editId ? false : true}
+                name="first_name"
+                onChange={(value: string) => handleChange("first_name", value)}
+                value={formData.first_name}
+              />
+            </div>
+
+            <div>
+              <TextField
+                placeholder="Duo"
+                type="text"
+                title="Last Name"
+                required={editId ? false : true}
+                name="last_name"
+                onChange={(value: string) => handleChange("last_name", value)}
+                value={formData.last_name}
+              />
+            </div>
+
+            <div>
+              <TextField
+                placeholder="example@gmail.com"
+                type="email"
+                title="Email"
+                required={editId ? false : true}
+                name="email"
+                onChange={(value: string) => handleChange("email", value)}
+                value={formData.email}
               />
             </div>
             <div>
               <TextField
-                placeholder="Example"
+                placeholder="1xxxxxxxxx"
                 type="text"
-                title="Coupon Code"
-                required={true}
-                name="coupon_code"
-                onChange={(value: string) => handleChange("coupon_code", value)}
-                value={formData.coupon_code}
+                title="Phone Number"
+                required={editId ? false : true}
+                name="phone_number"
+                onChange={(value: string) =>
+                  handleChange("phone_number", value)
+                }
+                value={formData.phone_number}
+              />
+            </div>
+
+            <div>
+              <PasswordField
+                placeholder="******"
+                title="Password"
+                required={editId ? false : true}
+                name="password"
+                onChange={(value: string) => handleChange("password", value)}
+                value={formData.password}
               />
             </div>
 
@@ -237,7 +277,7 @@ function AdminForm() {
                 onImagesChange={handleImageChange}
                 value={
                   editId
-                    ? [`${process.env.NEXT_PUBLIC_IMAGE_URL}${formData.logo}`]
+                    ? [`${process.env.NEXT_PUBLIC_IMAGE_URL}${formData.image}`]
                     : image
                 }
               />
@@ -266,7 +306,7 @@ function AdminForm() {
               className="border border-red-500 text-red-500 px-6 py-2 mx-2 font-semibold rounded-md flex items-center gap-x-3"
               type="button"
               onClick={() => {
-                router.push("/coupons");
+                router.push("/admins");
               }}
             >
               <span className="text-2xl">

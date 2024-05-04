@@ -53,31 +53,45 @@ function SplashList() {
     {
       name: "Image",
       selector: "images",
+      // cell: (row: any) => (
+      //   <div style={{ whiteSpace: "pre-line" }}>
+      //     <a
+      //       className="text-blue-900 font-semibold"
+      //       href={`${process.env.NEXT_PUBLIC_IMAGE_URL}${row.images}`}
+      //       target="_blank"
+      //     >
+      //       Image
+      //     </a>
+      //   </div>
+      // ),
       cell: (row: any) => (
-        <div style={{ whiteSpace: "pre-line" }}>
-          <a
-            className="text-blue-900 font-semibold"
-            href={`${process.env.NEXT_PUBLIC_IMAGE_URL}${row.images}`}
-            target="_blank"
-          >
-            Image
-          </a>
-        </div>
+        <img
+          src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${row.images}`}
+          className="w-32 h-16 text-center"
+          alt={row.title}
+        />
       ),
     },
     {
       name: "Logo",
       selector: "logo",
+      // cell: (row: any) => (
+      //   <div style={{ whiteSpace: "pre-line" }}>
+      //     <a
+      //       className="text-blue-900 font-semibold"
+      //       href={`${process.env.NEXT_PUBLIC_IMAGE_URL}${row.logo}`}
+      //       target="_blank"
+      //     >
+      //       Logo
+      //     </a>
+      //   </div>
+      // ),
       cell: (row: any) => (
-        <div style={{ whiteSpace: "pre-line" }}>
-          <a
-            className="text-blue-900 font-semibold"
-            href={`${process.env.NEXT_PUBLIC_IMAGE_URL}${row.logo}`}
-            target="_blank"
-          >
-            Logo
-          </a>
-        </div>
+        <img
+          src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${row.logo}`}
+          className="w-32 h-16 text-center"
+          alt={row.title}
+        />
       ),
     },
     { name: "Title", selector: "title" },

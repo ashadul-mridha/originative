@@ -77,3 +77,18 @@ export interface Admin {
   updated_at: Date;
 }
 
+export interface Boat {
+  _id:              string;
+  is_active:        boolean;
+  created_by:       null;
+  deleted_at:       null;
+  user_id:          string;
+  title:            string;
+  made_by:          string;
+  model:            string;
+  license_plate_no: string;
+  fuel_id:          string;
+  images:           string[];
+  created_at:       Date;
+  updated_at:       Date;
+}
